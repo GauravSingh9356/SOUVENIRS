@@ -1,0 +1,9 @@
+.recomm {
+  border: 2px solid black !important;
+  border-radius: 8px !important;
+}
+
+.recomm:hover,
+.recomm:active {
+  border: 3px solid #f50057 !important;
+}

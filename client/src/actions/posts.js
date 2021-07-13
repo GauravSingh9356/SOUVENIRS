@@ -44,17 +44,19 @@ export const createPost = (post, history) => async (dispatch) => {
   }
 };
 
-export const updatePost = (postData, currentId) => async (dispatch) => {
-  try {
-    // console.log(postData);
-    // console.log('hello');
-    const { data } = await api.updatePost(postData, currentId);
-    // console.log(data);
-    dispatch({ type: 'UPDATE', payload: data });
-  } catch (error) {
-    console.log(error.message);
-  }
-};
+export const updatePost =
+  (postData, currentId, history) => async (dispatch) => {
+    try {
+      // console.log(postData);
+      // console.log('hello');
+      const { data } = await api.updatePost(postData, currentId);
+      // console.log(data);
+      dispatch({ type: 'UPDATE', payload: data });
+      history.push(`/posts/${data._id}`);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
 export const deletePost = (id) => async (dispatch) => {
   try {
@@ -81,6 +83,7 @@ export const commentPost = (value, id) => async (dispatch) => {
     const { data } = await api.comment(value, id);
     console.log(data);
     dispatch({ type: 'COMMENT', payload: data });
+    return data.comments;
   } catch (error) {
     console.log('Error in frontend');
   }

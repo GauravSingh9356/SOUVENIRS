@@ -37,7 +37,7 @@ a {
 }
 .container label {
   text-align: left;
-  color: #f12558;
+  color: #2979ff;
 }
 .container form input {
   width: calc(100% - 20px);

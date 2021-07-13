@@ -17,10 +17,10 @@ const Send = ({ handleSubmit }) => {
         onChange={(e) => setMessage(e.target.value)}
       />
       <Button
-        style={{ marginLeft: '10px' }}
+        style={{ marginLeft: '10px', background: '#2979FF', color: 'white' }}
         type='submit'
+        disabled={!message}
         variant='contained'
-        color='secondary'
         onClick={(e) => {
           handleSubmit(message, e);
           setMessage('');

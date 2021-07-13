@@ -16,7 +16,7 @@ export default makeStyles((theme) => ({
     textDecoration: 'none',
   },
   image: {
-    marginLeft: '20px',
+    marginLeft: '30px',
   },
   toolbar: {
     display: 'flex',

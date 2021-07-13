@@ -21,6 +21,6 @@ router.post('/', auth, createPost);
 router.patch('/:id', auth, updatePost);
 router.delete('/:id', auth, deletePost);
 router.patch('/likepost/:id', auth, likePost);
-router.post('/commentPost/:id', commentPost);
+router.post('/:id/commentPost', auth, commentPost);
 
 module.exports = router;

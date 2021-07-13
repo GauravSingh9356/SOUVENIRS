@@ -5,32 +5,52 @@ export default makeStyles((theme) => ({
     borderRadius: '20px',
     objectFit: 'cover',
     width: '100%',
-    maxHeight: '600px',
+    boxContent: 'border-box',
+    marginBottom: '10px',
   },
   card: {
     display: 'flex',
     width: '100%',
+    boxContent: 'border-box',
+
     [theme.breakpoints.down('sm')]: {
+      flexWrap: 'wrap',
+      flexDirection: 'column',
+    },
+    [theme.breakpoints.down('xs')]: {
       flexWrap: 'wrap',
       flexDirection: 'column',
     },
   },
   section: {
-    borderRadius: '20px',
     margin: '10px',
     flex: 1,
+    width: '100%',
+    boxContent: 'border-box',
   },
   imageSection: {
     marginLeft: '20px',
+    flex: 1,
     [theme.breakpoints.down('sm')]: {
       marginLeft: 0,
     },
+    [theme.breakpoints.down('xs')]: {
+      marginLeft: 0,
+    },
+    width: '100%',
   },
   recommendedPosts: {
     display: 'flex',
     [theme.breakpoints.down('sm')]: {
       flexDirection: 'column',
     },
+    [theme.breakpoints.down('xs')]: {
+      flexDirection: 'column',
+    },
+    width: '100%',
+    border: '2px solid black',
+    boxShadow: '2px 2px 2px 2px rgba(0, 0, 0, 0.7)',
+    borderRadius: '8px',
   },
   loadingPaper: {
     display: 'flex',
@@ -40,6 +60,14 @@ export default makeStyles((theme) => ({
     borderRadius: '15px',
     height: '39vh',
   },
-
- 
+  commentsOuterContainer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  commentsInnerContainer: {
+    height: '200px',
+    overflowY: 'auto',
+    marginRight: '30px',
+  },
 }));

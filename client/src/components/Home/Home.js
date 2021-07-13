@@ -203,7 +203,15 @@ const Home = () => {
                 Search
               </Button>
             </AppBar>
-            <Form currentId={currentId} setCurrentId={setCurrentId} />
+            {/* <Form currentId={currentId} setCurrentId={setCurrentId} /> */}
+            <Button
+              variant='contained'
+              color='primary'
+              fullWidth
+              onClick={() => history.push(`/create`)}
+            >
+              Create
+            </Button>
             {!searchQuery && !tags.length && (
               <Paper className={classes.pagination} elevation={6}>
                 <Pagination page={page} />

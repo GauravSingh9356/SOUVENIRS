@@ -68,6 +68,11 @@ const Auth = () => {
     console.log('Google Sign in was unsuccessful! Try again');
   };
 
+  const handleForgotPassword = () => {
+    history.push('/auth/forgotPassword');
+    // dispatch(forgetPassword());
+  };
+
   return (
     <Container component='main' maxWidth='xs'>
       <Paper className={classes.paper} elevation={3}>
@@ -119,6 +124,17 @@ const Auth = () => {
               />
             )}
           </Grid>
+          {!isSignup && (
+            <Button
+              variant='contained'
+              color='secondary'
+              className={classes.submit}
+              fullWidth
+              onClick={handleForgotPassword}
+            >
+              Forgot Password
+            </Button>
+          )}
           <Button
             type='submit'
             fullWidth

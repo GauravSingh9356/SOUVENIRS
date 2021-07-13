@@ -1,4 +1,4 @@
-import { Button } from '@material-ui/core';
+import { Button, Paper } from '@material-ui/core';
 import ChatIcon from '@material-ui/icons/Chat';
 import DuoIcon from '@material-ui/icons/Duo';
 import React from 'react';
@@ -7,7 +7,7 @@ import './style.css';
 const Choose = () => {
   const history = useHistory();
   return (
-    <div className='main'>
+    <div className='main' style={{ padding: '80px' }}>
       <h2
         style={{
           fontWeight: 'bold',

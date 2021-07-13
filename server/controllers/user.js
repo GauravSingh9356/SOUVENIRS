@@ -21,7 +21,7 @@ const sendEmail = async (options) => {
     service: 'gmail',
     auth: {
       user: 'gauravsingh9356me@gmail.com',
-      pass: '#gauravsingh9356',
+      pass: '#gauravsingh9356me12345',
     },
   });
 
@@ -139,8 +139,68 @@ const verifyEmail = async (req, res) => {
   }
 };
 
+const forgetPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    // console.log(email);
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.json({ message: 'No User found with this email address!' });
+    }
+    const url = `https://memoriesbygs.netlify.app/auth/forgotPassword/${user.password}`;
+    console.log(user);
+    const message = `<h2>Greetings from Souvenirs!</h2>.<p>This is your unique link ${url}</p>. <h4>Gaurav Singh</h4><p>Souvenirs 2021</p>`;
+    await sendEmail({
+      email: user.email,
+      subject: 'Forgot Password!',
+      message,
+    });
+
+    res.status(200).json({ success: 'Success' });
+  } catch (error) {
+    return res.json({ message: 'Something went wrong!' });
+  }
+};
+
+const updatePassword = async (req, res) => {
+  try {
+    const { password, hashed } = req.body;
+    console.log(password, hashed);
+    const user = await User.findOne({ password: hashed });
+    console.log(user);
+    if (!user) {
+      return res.json({ message: 'Link is not Valid' });
+    }
+
+    user.password = await bcrypt.hash(password, 12);
+
+    const updatedUser = await User.findOneAndUpdate(
+      { password: hashed },
+      user,
+      { new: true }
+    );
+
+    console.log(updatedUser);
+
+    const message = `<h2>Greetings from Souvenirs!</h2>.<p>Congratulations your password has been updated!</p>. <h4>Gaurav Singh</h4><p>Souvenirs 2021</p>`;
+
+    await sendEmail({
+      email: user.email,
+      subject: 'Password Updated!',
+      message,
+    });
+    res.json({ updatedUser });
+  } catch (error) {
+    console.log(error);
+    res.json({ message: 'Some Error Occured!' });
+  }
+};
+
 module.exports = {
   signin,
   signup,
   verifyEmail,
+  forgetPassword,
+  updatePassword,
 };

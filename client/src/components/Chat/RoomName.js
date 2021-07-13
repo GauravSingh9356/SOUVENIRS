@@ -60,6 +60,7 @@ const RoomName = () => {
           label='Enter the Room Name'
           type='text'
           inputRef={roomRef}
+          style={{ color: 'red' }}
         />
         <br />
         <br />
@@ -83,6 +84,7 @@ const RoomName = () => {
           variant='outlined'
           label='Enter Unique Room ID'
           type='text'
+          style={{ color: 'red' }}
           inputRef={joinRef}
         />
         <br />

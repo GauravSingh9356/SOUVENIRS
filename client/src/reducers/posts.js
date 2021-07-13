@@ -1,3 +1,5 @@
+
+
 export default (state = { isLoading: true, posts: [] }, action) => {
   if (action.type == 'START_LOADING') {
     return { ...state, isLoading: true };

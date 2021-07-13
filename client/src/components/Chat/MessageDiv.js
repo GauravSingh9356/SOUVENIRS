@@ -1,9 +1,8 @@
 import React, { useState, useRef, useEffect, forwardRef } from 'react';
 import './style.css';
+import ReactEmoji from 'react-emoji';
 
-const MessageDiv = ({ socket }) => {
-  const [messageBox, setMessageBox] = useState([]);
-
+const MessageDiv = ({ messages }) => {
   const messageEndRef = useRef();
   const name =
     JSON.parse(localStorage.getItem('profile'))?.result?.name?.split(' ')[0] ||
@@ -18,28 +17,28 @@ const MessageDiv = ({ socket }) => {
     scrollToBottom();
   });
 
-  socket.on('broadcastMessage', (data) => {
-    // messageBox.push(data);
-    // localStorage.setItem('chat', JSON.stringify([...messageBox]));
-    // totalMessages = JSON.parse(localStorage.getItem('chat'));
-    // console.log(totalMessages);
+  // socket.on('broadcastMessage', (data) => {
+  //   // messageBox.push(data);
+  //   // localStorage.setItem('chat', JSON.stringify([...messageBox]));
+  //   // totalMessages = JSON.parse(localStorage.getItem('chat'));
+  //   // console.log(totalMessages);
 
-    setMessageBox([
-      ...messageBox,
-      {
-        message: data.message,
-        name: data.name,
-        pic: data.pic,
-        time: new Date().toLocaleTimeString(),
-      },
-    ]);
-    // console.log(messageBox);
-    // setRen(!ren);
-  });
+  //   setMessageBox([
+  //     ...messageBox,
+  //     {
+  //       message: data.message,
+  //       name: data.name,
+  //       pic: data.pic,
+  //       time: new Date().toLocaleTimeString(),
+  //     },
+  //   ]);
+  //   // console.log(messageBox);
+  //   // setRen(!ren);
+  // });
 
   return (
     <main className='msger-chat'>
-      {messageBox.map((data) => {
+      {messages.map((data) => {
         return (
           <div key={Math.random()} className='box'>
             <div
@@ -64,7 +63,9 @@ const MessageDiv = ({ socket }) => {
                   <div className='msg-info-time'>{data.time}</div>
                 </div>
 
-                <div className='msg-text'>{data.message}</div>
+                <div className='msg-text'>
+                  {ReactEmoji.emojify(data.message)}
+                </div>
               </div>
             </div>
           </div>

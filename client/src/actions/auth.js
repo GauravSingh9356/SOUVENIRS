@@ -58,3 +58,48 @@ export const signup = (formData, history) => async (dispatch) => {
     console.log(error);
   }
 };
+
+export const forgetPassword = (email, history) => async (dispatch) => {
+  try {
+    let { data } = await api.forgetPassword(email);
+    console.log(data);
+    if (!data?.message) {
+      history.push('/auth/forgotPassword');
+      return true;
+    } else {
+      dispatch({
+        type: 'ERROR',
+        payload: 'No User Found with this email address!',
+      });
+      history.push('/error');
+    }
+  } catch (error) {
+    dispatch({
+      type: 'ERROR',
+      payload: 'Some Error Occurred!',
+    });
+    history.push('/error');
+  }
+};
+
+export const updatePasswords =
+  (password, hashed, history) => async (dispatch) => {
+    try {
+      const { data } = await api.updatePassword(password, hashed);
+      if (!data?.message) {
+        history.push('/success');
+      } else {
+        dispatch({
+          type: 'ERROR',
+          payload: 'No User with this token OR the Link is Expired!',
+        });
+        history.push('/error');
+      }
+    } catch (error) {
+      dispatch({
+        type: 'ERROR',
+        payload: 'Some error occurred!',
+      });
+      history.push('/error');
+    }
+  };

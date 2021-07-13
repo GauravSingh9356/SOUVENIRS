@@ -13,11 +13,12 @@ import memories from '../../images/memories.png';
 import { useDispatch } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
+import Brightness4Icon from '@material-ui/icons/Brightness4';
 import 'react-responsive-modal/styles.css';
 
 import decode from 'jwt-decode';
 
-const Navbar = () => {
+const Navbar = ({ handleDarkMode }) => {
   const classes = useStyles();
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
   const dispatch = useDispatch();
@@ -83,15 +84,25 @@ const Navbar = () => {
           draggable
           pauseOnHover
         />
-        <img
-          className={classes.image}
+        <Button
           style={{
-            display: `${window.innerWidth < 870 ? 'none' : 'block'}`,
+            marginLeft: '20px',
+            display: `${window.innerWidth < 697 ? 'none' : 'flex'}`,
           }}
-          src={memories}
-          alt='memories'
-          height='60'
-        />
+          variant='outlined'
+          color='primary'
+          onClick={handleDarkMode}
+        >
+          <Brightness4Icon
+            style={{
+              marginRight: '5px',
+            }}
+            src={memories}
+            alt='memories'
+            fontSize='large'
+          />
+          Toggle
+        </Button>
       </div>
       <Grid className={classes.toolbar}>
         {user ? (

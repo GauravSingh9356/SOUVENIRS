@@ -9,18 +9,35 @@ import {
 import useStyles from './styles';
 import FileBase from 'react-file-base64';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation, useHistory } from 'react-router-dom';
+import { useLocation, useHistory, useParams } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { createPost, updatePost } from '../../actions/posts';
+import {
+  EditorState,
+  convertFromRaw,
+  convertToRaw,
+  ContentState,
+} from 'draft-js';
+import { Editor } from 'react-draft-wysiwyg';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import Badge from 'react-simple-badges';
 
-const Form = ({ currentId, setCurrentId }) => {
+import draftToHtml from 'draftjs-to-html';
+import htmlToDraft from 'html-to-draftjs';
+
+const Form = () => {
   const [postData, setPostData] = useState({
     title: '',
     message: '',
     tags: '',
     selectedFile: '',
   });
+  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  const { currentId } = useParams();
+  console.log(currentId);
+  const [content, setContent] = useState('');
+
   const location = useLocation();
   const history = useHistory();
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')));
@@ -34,18 +51,38 @@ const Form = ({ currentId, setCurrentId }) => {
       return null;
     }
   });
+  console.log(post);
 
   useEffect(() => {
     if (post) {
-      setPostData(post);
+      const contentBlock = htmlToDraft(post.message);
+      const contentState = ContentState.createFromBlockArray(
+        contentBlock.contentBlocks
+      );
+      const editorState = EditorState.createWithContent(contentState);
+
+      // const editorState = stateToHTML(convertFromRaw(JSON.parse(post.message)));
+      setEditorState(editorState);
+
+      setPostData({ ...post, message: editorState });
     }
   }, [post]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     if (currentId) {
       dispatch(
-        updatePost({ ...postData, name: user?.result?.name }, currentId)
+        updatePost(
+          {
+            ...postData,
+            message: content,
+            tags: postData.tags.map((tag) => tag.trim()),
+            name: user?.result?.name,
+          },
+          currentId,
+          history
+        )
       );
       clear();
       toast.info('Post Updated!', {
@@ -66,7 +103,17 @@ const Form = ({ currentId, setCurrentId }) => {
       });
     } else {
       console.log(postData);
-      dispatch(createPost({ ...postData, name: user?.result?.name }, history));
+      dispatch(
+        createPost(
+          {
+            ...postData,
+            message: content,
+            tags: postData.tags.map((tag) => tag.trim()),
+            name: user?.result?.name,
+          },
+          history
+        )
+      );
 
       toast.info('Post Created!', {
         position: 'top-center',
@@ -86,9 +133,9 @@ const Form = ({ currentId, setCurrentId }) => {
       });
       clear();
     }
+    setEditorState(EditorState.createEmpty());
   };
   const clear = () => {
-    setCurrentId(null);
     setPostData({
       title: '',
       message: '',
@@ -132,7 +179,11 @@ const Form = ({ currentId, setCurrentId }) => {
         onSubmit={handleSubmit}
       >
         <Typography variant='h6'>
-          {currentId ? 'Edit Memory' : 'Create Memory'}
+          <Badge
+            name={`${currentId ? 'Edit Blog/Memory' : 'Create Blog/Memory'}`}
+            backgroundColor='#3f51b5'
+          />
+          {}
         </Typography>
 
         <TextField
@@ -147,19 +198,6 @@ const Form = ({ currentId, setCurrentId }) => {
         />
 
         <TextField
-          name='message'
-          multiline
-          rows={5}
-          variant='outlined'
-          label='Message'
-          fullWidth
-          value={postData.message}
-          onChange={(e) => {
-            setPostData({ ...postData, message: e.target.value });
-          }}
-        />
-
-        <TextField
           name='tags'
           variant='outlined'
           label='Tags'
@@ -169,7 +207,48 @@ const Form = ({ currentId, setCurrentId }) => {
             setPostData({ ...postData, tags: e.target.value.split(',') });
           }}
         />
-        <div className={classes.fileInput}>
+
+        <Editor
+          // name='message'
+          // multiline
+          // rows={25}
+          // variant='outlined'
+          editorState={editorState}
+          toolbarClassName='toolbarClassName'
+          wrapperClassName='wrapperClassName'
+          editorClassName='editorClassName'
+          editorStyle={{
+            border: '2px solid black',
+            borderRadius: '8px',
+            padding: '10px',
+            minHeight: '400px',
+          }}
+          onEditorStateChange={(newState) => {
+            setEditorState(newState);
+            setContent(draftToHtml(convertToRaw(newState.getCurrentContent())));
+          }}
+          // toolbar={{
+          //   options: [
+          //     'inline',
+          //     'blockType',
+          //     'fontSize',
+          //     'list',
+          //     'textAlign',
+          //     'history',
+          //     'embedded',
+          //     'emoji',
+          //     'image',
+          //     'link',
+          //   ],
+          //   inline: { inDropdown: true },
+          //   list: { inDropdown: true },
+          //   textAlign: { inDropdown: true },
+          //   link: { inDropdown: false },
+          //   history: { inDropdown: true },
+          // }}
+        />
+
+        <div className={classes.fileInput} style={{ marginTop: '100px' }}>
           <FileBase
             type='file'
             multiple={false}
@@ -178,6 +257,7 @@ const Form = ({ currentId, setCurrentId }) => {
             }}
           />
         </div>
+
         <Button
           className={classes.buttonSubmit}
           variant='contained'

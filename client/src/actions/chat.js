@@ -13,7 +13,7 @@ export const createRoom = (roomName, history) => async (dispatch) => {
       data.newRoom.isJoining = false;
       dispatch({ type: 'CHAT', payload: data.newRoom });
 
-      history.push(`/roomchat/:${roomName}`);
+      history.push(`/roomchat/${roomName}`);
     }
   } catch (error) {
     console.log(error.message);
@@ -32,7 +32,7 @@ export const joinRoom = (roomPassword, history) => async (dispatch) => {
       data.existingRoom.isJoining = true;
       dispatch({ type: 'CHAT', payload: data.existingRoom });
 
-      history.push(`/roomchat/:${data.existingRoom.name}`);
+      history.push(`/roomchat/${data.existingRoom.name}`);
     }
   } catch (error) {
     console.log(error.message);

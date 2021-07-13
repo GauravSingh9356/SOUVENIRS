@@ -1,8 +1,9 @@
 import React from 'react';
 import Post from './Post/Post';
 import useStyles from './styles';
-import { Grid, CircularProgress } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import { useSelector } from 'react-redux';
+import HashLoader from 'react-spinners/ClipLoader';
 
 const Posts = ({ setCurrentId }) => {
   const classes = useStyles();
@@ -15,7 +16,15 @@ const Posts = ({ setCurrentId }) => {
 
   if (!posts.length && !isLoading) return 'No Posts!';
   return isLoading ? (
-    <CircularProgress />
+    <div
+      style={{
+        textAlign: 'center',
+        marginRight: `${window.innerWidth < 768 ? '100px' : '0px'} `,
+        marginTop: '35px',
+      }}
+    >
+      <HashLoader size={window.innerWidth < 768 ? 101 : 151} color='#ff0000' />
+    </div>
   ) : (
     <Grid
       className={classes.container}

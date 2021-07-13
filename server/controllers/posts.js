@@ -54,7 +54,8 @@ const getPostsBySearch = async (req, res) => {
 const createPost = async (req, res) => {
   try {
     // console.log(req.body);
-    const newPost = req.body;
+    const newPost = { ...req.body, message: req.body.message.blocks[0].text };
+
     const post = await PostMessage.create({
       ...newPost,
       creator: req.userId,

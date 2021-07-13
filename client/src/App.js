@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Container } from '@material-ui/core';
 import {
   BrowserRouter as Router,
@@ -16,8 +16,13 @@ import Error from './components/Error';
 import RoomName from './components/Chat/RoomName';
 import PostDetails from './components/PostDetails/PostDetails';
 import Choose from './components/Choose';
+import Success from './components/Success';
+
+import forgotPassword from './components/Auth/forgotPassword';
+import updatePassword from './components/Auth/updatePassword';
 
 import Chat from './components/Chat/Chat';
+import Form from './components/Form/Form';
 
 const App = () => {
   const user = JSON.parse(localStorage.getItem('profile'))?.result?.name;
@@ -26,13 +31,18 @@ const App = () => {
     transports: ['websocket', 'polling', 'flashsocket'],
   });
 
-  // const [me, setMe] = useState();
-  // socket.on('me', (id) => );
+  const [dark, setDark] = useState(false);
+
+  const handleDarkMode = () => {
+    if (!dark) document.body.style.background = '#000';
+    else document.body.style.background = '#f7f8fc';
+    setDark(!dark);
+  };
 
   return (
     <Router>
       <Container maxWidth='xl'>
-        <Navbar />
+        <Navbar handleDarkMode={handleDarkMode} />
         <Switch>
           <Route path='/' exact component={() => <Redirect to='/posts' />} />
           <Route path='/posts' exact component={Home} />
@@ -47,6 +57,11 @@ const App = () => {
               else return <Redirect to='/posts' />;
             }}
           />
+          <Route path='/create' exact component={Form} />
+
+          <Route path='/create/:currentId' exact component={Form} />
+          <Route path='/auth/forgotPassword' exact component={forgotPassword} />
+          <Route path='/auth/forgotPassword/:id' component={updatePassword} />
 
           <Route path='/error' exact>
             <Error />
@@ -56,6 +71,10 @@ const App = () => {
           </Route>
           <Route path='/roomname' exact>
             <RoomName />
+          </Route>
+
+          <Route path='/success' exact>
+            <Success />
           </Route>
 
           <Route path='/roomchat/:roomName' exact>

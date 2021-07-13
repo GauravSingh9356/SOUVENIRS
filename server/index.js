@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const { addUser, removeUser, getUser, getUsersInRoom } = require('./Users');
 // const socket = require('socket.io');
 
 const cors = require('cors');
@@ -14,10 +15,8 @@ const app = express();
 
 const server = require('http').createServer(app);
 const upgradedServer = require('socket.io')(server, {
-  cors: {
-    origin: '*',
-    methods: ['GET', 'POST'],
-  },
+  cors: true,
+  origins: ['http://localhost:3000'],
 });
 
 dotenv.config();
@@ -49,13 +48,49 @@ app.use('/createroom', chatRoomRoute);
 app.use('/joinroom', joinRoomRoute);
 
 upgradedServer.on('connection', (socket) => {
-  // socket.emit('me', socket.id);
-
+  console.log('Connected Established Socket');
   //Sending an object when emmiting an event
+  socket.on('join', ({ name, room, photo }) => {
+    const { error, user } = addUser({ id: socket.id, name, room, photo });
+    if (error) {
+      console.log(error);
+      return;
+    }
+    socket.emit('message', {
+      user: 'admin',
+      text: `${user.name}, Welcome to ${user.room}`,
+      photo: user.photo,
+    });
+
+    socket.broadcast.to(user.room).emit('message', {
+      user: 'admin',
+      text: `${user.name} is Joined!`,
+      photo: user.photo,
+    });
+
+    socket.join(user.room);
+    upgradedServer
+      .to(user.room)
+      .emit('roomData', { room: user.room, users: getUsersInRoom(user.room) });
+  });
 
   socket.on('sendingMessage', (data) => {
     // console.log(data);
-    upgradedServer.emit('broadcastMessage', data);
+    const user = getUser(socket.id);
+    upgradedServer.to(user.room).emit('message', data);
+    upgradedServer
+      .to(user.room)
+      .emit('roomData', { room: user.room, users: getUsersInRoom(user.room) });
+  });
+
+  socket.on('disconnect', () => {
+    const user = removeUser(socket.id);
+    if (user) {
+      upgradedServer.to(user.room).emit('message', {
+        user: 'admin',
+        text: `${user.name} has left the room`,
+      });
+    }
   });
 
   // console.log('Connection established', socket.id);

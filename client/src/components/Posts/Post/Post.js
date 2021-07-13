@@ -11,12 +11,14 @@ import {
   ButtonBase,
 } from '@material-ui/core';
 import {
-  FacebookIcon,
+  EmailIcon,
   LinkedinIcon,
   RedditIcon,
   TwitterIcon,
   WhatsappIcon,
+  TelegramIcon,
 } from 'react-share';
+import Badge from 'react-simple-badges';
 import { useHistory } from 'react-router-dom';
 import ShareIcon from '@material-ui/icons/Share';
 import FavoriteIcon from '@material-ui/icons/Favorite';
@@ -26,11 +28,12 @@ import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
 import moment from 'moment';
 import { Modal } from 'react-responsive-modal';
 import {
-  FacebookShareButton,
+  EmailShareButton,
   LinkedinShareButton,
   RedditShareButton,
   TwitterShareButton,
   WhatsappShareButton,
+  TelegramShareButton,
 } from 'react-share';
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -44,22 +47,27 @@ const Post = ({ post, setCurrentId }) => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const [comment, setComment] = useState(false);
-  const [cvalue, setCValue] = useState('');
   const [c, setC] = useState(post.comments);
   const [share, setShare] = useState(false);
+  const [instruct, setInstruct] = useState(false);
+  const [likes, setLikes] = useState(post?.likes);
 
   const posts = useSelector((state) => {
     return state.posts;
   });
 
-  const handleComment = (value, id) => {
-    dispatch(commentPost(value, id));
-    setCValue('');
+  const test = (data) => {
+    return (
+      data.includes('hour') ||
+      data.includes('hours') ||
+      data.includes('seconds') ||
+      data.includes('minutes')
+    );
   };
+  const url = `${document.URL}/${post._id}`;
 
   const user = JSON.parse(localStorage.getItem('profile'));
-  const title = `${post.title} written by ${post.name}. Checkout this awesome story at ${document.URL}!`;
+  const title = `Checkout this Awesome story "${post.title}" written by ${post.name}`;
 
   const Likes = () => {
     if (post.likes.length > 0) {
@@ -118,7 +126,7 @@ const Post = ({ post, setCurrentId }) => {
           {(user?.result?.googleId === post?.creator ||
             user?.result?._id === post?.creator) && (
             <Button
-              onClick={() => setCurrentId(post._id)}
+              onClick={() => history.push(`/create/${post._id}`)}
               style={{ color: 'white' }}
               size='small'
             >
@@ -142,10 +150,6 @@ const Post = ({ post, setCurrentId }) => {
               onClose={() => {
                 setShare(!share);
               }}
-              classNames={{
-                overlay: 'customOverlay',
-                modal: 'customModal',
-              }}
             >
               <h2
                 style={{
@@ -156,38 +160,68 @@ const Post = ({ post, setCurrentId }) => {
               >
                 Share!
               </h2>
-              <FacebookShareButton
-                title={title}
-                children={<FacebookIcon round={true} size={60} />}
-                url={document.URL}
-              />
-              <WhatsappShareButton
-                title={title}
-                children={<WhatsappIcon round={true} size={60} />}
-                url={document.URL}
-              />
-              <TwitterShareButton
-                title={title}
-                children={<TwitterIcon round={true} size={60} />}
-                url={document.URL}
-              />
-              <LinkedinShareButton
-                title={title}
-                children={<LinkedinIcon round={true} size={60} />}
-                url={document.URL}
-              />
-              <RedditShareButton
-                title={title}
-                children={<RedditIcon round={true} size={60} />}
-                url={document.URL}
-              />
+              <div
+                style={{
+                  padding: '20px',
+                }}
+              >
+                <RedditShareButton
+                  title={title}
+                  children={<RedditIcon round={true} size={60} />}
+                  url={url}
+                  style={{ marginLeft: '10px' }}
+                />
+
+                <WhatsappShareButton
+                  title={title}
+                  children={<WhatsappIcon round={true} size={60} />}
+                  url={url}
+                  style={{ marginLeft: '10px' }}
+                />
+                <TelegramShareButton
+                  title={title}
+                  children={<TelegramIcon round={true} size={60} />}
+                  url={url}
+                  style={{ marginLeft: '10px' }}
+                />
+                <EmailShareButton
+                  title={title}
+                  children={<EmailIcon round={true} size={60} />}
+                  url={url}
+                  style={{ marginLeft: '10px' }}
+                />
+                <TwitterShareButton
+                  title={title}
+                  children={<TwitterIcon round={true} size={60} />}
+                  url={url}
+                  style={{ marginLeft: '10px' }}
+                />
+                <LinkedinShareButton
+                  title={title}
+                  children={<LinkedinIcon round={true} size={60} />}
+                  url={url}
+                  style={{ marginLeft: '10px' }}
+                />
+              </div>
             </Modal>
           )}
         </div>
         <ButtonBase className={classes.cardAction} onClick={openPost}>
           <div className={classes.details}>
             <Typography variant='body2' color='textSecondary'>
-              {post.tags.map((tag) => `#${tag} `)}
+              {post.tags.map((tag) => (
+                <Badge name={`#${tag} `} backgroundColor='#3f51b5' />
+              ))}
+            </Typography>
+            <Typography variant='body2' color='textSecondary'>
+              {test(moment(post.createdAt).fromNow().split(' ')) && (
+                <Badge name='New' backgroundColor='#32a853' />
+              )}
+            </Typography>
+            <Typography variant='body2' color='textSecondary'>
+              {(post.comments.length >= 4 || post.likes.length >= 4) && (
+                <Badge name='Hot' backgroundColor='#32a853' />
+              )}
             </Typography>
           </div>
           <Typography
@@ -204,7 +238,9 @@ const Post = ({ post, setCurrentId }) => {
               component='p'
               style={{ color: 'black' }}
             >
-              {post.message.slice(0, 280)}
+              <div
+                dangerouslySetInnerHTML={{ __html: post.message.slice(0, 111) }}
+              />
               {'...'}
               <Button variant='contained' color='secondary'>
                 Read More
@@ -215,84 +251,46 @@ const Post = ({ post, setCurrentId }) => {
         <CardActions className={classes.cardActions}>
           <Button
             size='small'
-            disabled={!user?.result}
+            style={{ color: 'red' }}
+            // disabled={!user?.result}
             onClick={() => {
-              dispatch(likePost(post._id));
+              if (!user?.result) {
+                setInstruct(!instruct);
+              } else dispatch(likePost(post._id));
             }}
           >
             <Likes />
           </Button>
+
           <Button
             size='small'
-            disabled={!user?.result}
             color='secondary'
-            onClick={() => {
-              setC(post.comments);
-              // console.log(c);
-              setComment(!comment);
-
-              // console.log(comment);
-            }}
+            disabled={true}
+            style={{ color: 'red' }}
           >
             <QuestionAnswerIcon color='secondary' /> &nbsp; &nbsp;
             {c.length}
-            {comment && (
+            {instruct && (
               <Modal
-                center
-                open={comment}
+                centerTop
+                open={instruct}
                 onClose={() => {
-                  setComment(!comment);
+                  setInstruct(!instruct);
                 }}
                 classNames={{
                   overlay: 'customOverlay',
                   modal: 'customModal',
                 }}
               >
-                <h2 style={{ textAlign: 'center', marginBottom: '15px' }}>
-                  Comments
-                </h2>
-                {c.map((comment, id) => {
-                  return (
-                    <p
-                      key={id}
-                      style={{
-                        fontFamily: 'Tahoma',
-                        fontWeight: 'bold',
-                        color: 'black',
-                        marginBottom: '8px',
-                      }}
-                    >
-                      {comment}
-                    </p>
-                  );
-                })}
-                <br />
-                <TextField
-                  variant='outlined'
-                  label='comment'
+                <h3
                   style={{
-                    width: '75%',
-                  }}
-                  placeholder='Write your comment...'
-                  value={cvalue}
-                  onChange={(e) => {
-                    setCValue(e.target.value);
-                  }}
-                />
-                <Button
-                  disabled={!cvalue.length}
-                  color='primary'
-                  variant='contained'
-                  style={{
-                    marginTop: '10px',
-                    marginLeft: '10px',
-                  }}
-                  onClick={() => {
-                    handleComment(`${user?.result?.name}: ${cvalue}`, post._id);
+                    textAlign: 'center',
+                    fontFamily: 'Tahoma',
+                    padding: '25px',
                   }}
                 >
-                  Comment
-                </Button>
+                  Please Login to Connect!
+                </h3>
               </Modal>
             )}
           </Button>

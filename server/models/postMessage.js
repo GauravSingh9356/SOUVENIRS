@@ -23,7 +23,7 @@ const postSchema = new mongoose.Schema({
     type: [String],
     default: [],
   },
-  comments:{
+  comments: {
     type: [String],
     default: [],
   },

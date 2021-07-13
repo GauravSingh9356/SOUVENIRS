@@ -47,7 +47,7 @@ export const signup = (formData) => {
 };
 
 export const comment = (value, id) => {
-  return API.post(`/posts/commentPost/${id}`, { value: value });
+  return API.post(`/posts/${id}/commentPost`, { value: value });
 };
 
 export const apiCall = (email) => {
@@ -66,4 +66,12 @@ export const joinRoom = (roomPassword) => {
 
 export const fetchPost = (id) => {
   return API.get(`/posts/${id}`);
+};
+
+export const forgetPassword = (email) => {
+  return API.post(`/users/forgetPassword`, { email });
+};
+
+export const updatePassword = (password, hashed) => {
+  return API.post(`/users/updatePassword`, { password, hashed });
 };
