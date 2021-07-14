@@ -20,7 +20,22 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { getPosts, getPostsBySearch } from '../../actions/posts';
 import 'react-responsive-modal/styles.css';
 import { Modal } from 'react-responsive-modal';
-
+import {
+  EmailIcon,
+  LinkedinIcon,
+  RedditIcon,
+  TwitterIcon,
+  WhatsappIcon,
+  TelegramIcon,
+} from 'react-share';
+import {
+  EmailShareButton,
+  LinkedinShareButton,
+  RedditShareButton,
+  TwitterShareButton,
+  WhatsappShareButton,
+  TelegramShareButton,
+} from 'react-share';
 // import useStyles from '../../styles';
 import Posts from '../Posts/Posts';
 import Form from '../Form/Form';
@@ -46,6 +61,9 @@ const Home = () => {
   let name = JSON.parse(localStorage.getItem('profile'));
   // console.log(name);
   // const [showModal, setShowModal] = useState(user);
+  const url = 'https://memoriesbygs.netlify.app';
+  const title = `Checkout Souvenirs Platform at ${url}`;
+
   let showLogin =
     JSON.parse(localStorage.getItem('profile'))?.showLoginMessage || false;
 
@@ -230,6 +248,60 @@ const Home = () => {
           draggable
           pauseOnHover
         />
+        <div
+          style={{
+            textAlign: 'center',
+            marginTop: '40px',
+
+            // padding: '15px',
+            // border: '2px solid white',
+            // boxShadow: '2px 2px 2px 2px rgba(0, 0, 0, 0.8)',
+          }}
+        >
+          <RedditShareButton
+            title={title}
+            children={<RedditIcon round={true} size={60} />}
+            url={url}
+            className='social-hover'
+            style={{ marginLeft: '20px' }}
+          />
+
+          <WhatsappShareButton
+            title={title}
+            children={<WhatsappIcon round={true} size={60} />}
+            url={url}
+            style={{ marginLeft: '20px' }}
+            className='social-hover'
+          />
+          <TelegramShareButton
+            title={title}
+            children={<TelegramIcon round={true} size={60} />}
+            url={url}
+            style={{ marginLeft: '20px' }}
+            className='social-hover'
+          />
+          <EmailShareButton
+            title={title}
+            children={<EmailIcon round={true} size={60} />}
+            url={url}
+            style={{ marginLeft: '20px' }}
+            className='social-hover'
+          />
+          <TwitterShareButton
+            title={title}
+            children={<TwitterIcon round={true} size={60} />}
+            url={url}
+            style={{ marginLeft: '20px' }}
+            className='social-hover'
+          />
+          <LinkedinShareButton
+            title={title}
+            children={<LinkedinIcon round={true} size={60} />}
+            url={url}
+            style={{ marginLeft: '20px' }}
+            className='social-hover'
+          />
+        </div>
       </Container>
     </Grow>
   );

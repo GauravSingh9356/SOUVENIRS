@@ -34,3 +34,9 @@ body {
     rgba(252, 70, 107, 1) 100%
   ); */
 }
+.social-hover {
+  transition: transform 0.2s;
+}
+.social-hover:hover {
+  transform: scale(1.3);
+}

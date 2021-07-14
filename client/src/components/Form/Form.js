@@ -102,7 +102,6 @@ const Form = () => {
         },
       });
     } else {
-      console.log(postData);
       dispatch(
         createPost(
           {
@@ -114,6 +113,8 @@ const Form = () => {
           history
         )
       );
+      console.log(postData);
+
 
       toast.info('Post Created!', {
         position: 'top-center',

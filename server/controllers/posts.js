@@ -1,3 +1,5 @@
+
+
 const { findByIdAndUpdate } = require('../models/postMessage');
 const PostMessage = require('../models/postMessage');
 
@@ -53,8 +55,10 @@ const getPostsBySearch = async (req, res) => {
 
 const createPost = async (req, res) => {
   try {
-    // console.log(req.body);
-    const newPost = { ...req.body, message: req.body.message.blocks[0].text };
+    console.log(req.body);
+    // const message = convert(req.body.message);
+    // console.log(message);
+    const newPost = { ...req.body, message: req.body.message };
 
     const post = await PostMessage.create({
       ...newPost,

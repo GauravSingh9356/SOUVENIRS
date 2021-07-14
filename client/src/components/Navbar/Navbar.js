@@ -9,7 +9,7 @@ import {
 } from '@material-ui/core';
 import useStyles from './styles';
 import { Link } from 'react-router-dom';
-import memories from '../../images/memories.png';
+import memories from '../../images/pictures.png';
 import { useDispatch } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
@@ -70,8 +70,13 @@ const Navbar = ({ handleDarkMode }) => {
           className={classes.heading}
           variant={`${window.innerWidth < 870 ? 'h4' : 'h2'}`}
           align='center'
+          // style={{ display: `${window.innerWidth < 768 ? 'none' : 'block'}` }}
         >
-          Souvenirs
+          {window.innerWidth < 768 ? (
+            <img src={memories} style={{ width: '40px', height: '40px' }} />
+          ) : (
+            'Souvenirs'
+          )}
         </Typography>
         <ToastContainer
           position='top-center'
@@ -87,10 +92,12 @@ const Navbar = ({ handleDarkMode }) => {
         <Button
           style={{
             marginLeft: '20px',
-            display: `${window.innerWidth < 697 ? 'none' : 'flex'}`,
+            // display: `${window.innerWidth < 697 ? 'none' : 'flex'}`,
+
+            // color: 'black',
           }}
-          variant='outlined'
-          color='primary'
+          variant='contained'
+          color='secondary'
           onClick={handleDarkMode}
         >
           <Brightness4Icon
@@ -101,7 +108,7 @@ const Navbar = ({ handleDarkMode }) => {
             alt='memories'
             fontSize='large'
           />
-          Toggle
+          {window.innerWidth > 697 ? 'Toggle' : ''}
         </Button>
       </div>
       <Grid className={classes.toolbar}>
