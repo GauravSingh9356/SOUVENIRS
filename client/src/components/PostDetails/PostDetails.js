@@ -37,7 +37,6 @@ import {
 import { Modal } from 'react-responsive-modal';
 import './style.css';
 
-
 const PostDetails = () => {
   const { post, posts, isLoading } = useSelector((state) => state.posts);
   const user = JSON.parse(localStorage.getItem('profile'));
@@ -67,7 +66,7 @@ const PostDetails = () => {
   if (isLoading)
     return (
       <Paper elevation={6} className={classes.loadingPaper}>
-        <CircularProgress size='7em' />
+        <CircularProgress size='7em' style={{ color: 'red' }} />
       </Paper>
     );
 
@@ -79,13 +78,13 @@ const PostDetails = () => {
 
   return (
     <Paper style={{ padding: '20px', borderRadius: '15px' }} elevation={6}>
-      <Button
+      {/* <Button
         variant='contained'
         color='primary'
         onClick={() => history.push('/posts')}
       >
         Back
-      </Button>
+      </Button> */}
       <div className={classes.card}>
         <div className={classes.section}>
           <Typography variant='h3' component='h3'>
@@ -113,11 +112,11 @@ const PostDetails = () => {
             <div
               style={{
                 border: '2px solid black',
-                padding: '10px',
+                padding: '15px',
                 borderRadius: '5px',
               }}
             >
-              <Linkify
+              {/* <Linkify
                 componentDecorator={(decoratedHref, decoratedText, key) => (
                   <a
                     style={{ color: 'red', width: '100%' }}
@@ -128,9 +127,9 @@ const PostDetails = () => {
                     {decoratedText}
                   </a>
                 )}
-              >
-                <div dangerouslySetInnerHTML={{ __html: post.message }} />
-              </Linkify>
+              > */}
+              <div dangerouslySetInnerHTML={{ __html: post.message }} />
+              {/* </Linkify> */}
             </div>
           </Typography>
           <Typography variant='h5'>
@@ -240,19 +239,11 @@ const PostDetails = () => {
           <strong>Realtime Chat - coming soon!</strong>
         </Typography> */}
           {/* <Divider style={{ margin: '20px 0' }} /> */}
-          <div
-            style={{
-              border: '2px solid black',
-              margin: '20px 0',
-              padding: '10px',
-              borderRadius: '5px',
-            }}
-          >
-            <CommentSection post={post} />
-          </div>
+
           <Divider style={{ margin: '20px 0' }} />
         </div>
-        <div className={classes.imageSection}>
+
+        <div className={`${classes.imageSection} imageSection`}>
           <img
             className={classes.media}
             src={
@@ -264,6 +255,11 @@ const PostDetails = () => {
           />
         </div>
       </div>
+
+      <div className='comment respon'>
+        <CommentSection post={post} />
+      </div>
+
       {recommendedPosts.length == 0 ? (
         ''
       ) : (
@@ -272,7 +268,7 @@ const PostDetails = () => {
             <Badge name='You might also like:' backgroundColor='#3f51b5' />
           </Typography>
           <Divider />
-          <div className={classes.recommendedPosts}>
+          <div className={`${classes.recommendedPosts}`}>
             {recommendedPosts.map(
               ({ title, message, name, likes, selectedFile, _id }) => (
                 <div
@@ -289,9 +285,9 @@ const PostDetails = () => {
                 >
                   <Typography gutterBottom variant='h4'>
                     <Badge
-                      name={title}
+                      name={title.slice(0, 25) + '...'}
                       backgroundColor='#f50057'
-                      style={{ width: '500', height: '500' }}
+                      // style={{ width: '500', height: '500' }}
                     />
                   </Typography>
                   <Typography gutterBottom variant='subtitle2'>
@@ -310,7 +306,14 @@ const PostDetails = () => {
                       backgroundColor='#3f51b5'
                     />
                   </Typography>
-                  <img src={selectedFile} width='200px' />
+                  <img
+                    src={selectedFile}
+                    width='200px'
+                    style={{
+                      boxShadow: '2px 2px 2px 2px rgba(0, 0, 0, 0.8',
+                      borderRadius: '4px',
+                    }}
+                  />
                 </div>
               )
             )}

@@ -2,16 +2,19 @@ import { makeStyles } from '@material-ui/core/styles';
 
 export default makeStyles((theme) => ({
   media: {
-    borderRadius: '20px',
+    borderRadius: '15px',
     objectFit: 'cover',
     width: '100%',
     boxContent: 'border-box',
     marginBottom: '10px',
+    boxShadow: '2px 2px 2px 2px rgba(0, 0, 0, 0.6)',
   },
   card: {
     display: 'flex',
     width: '100%',
+
     boxContent: 'border-box',
+    justifyContent: 'center',
 
     [theme.breakpoints.down('sm')]: {
       flexWrap: 'wrap',
@@ -27,6 +30,7 @@ export default makeStyles((theme) => ({
     flex: 1,
     width: '100%',
     boxContent: 'border-box',
+    marginTop: '30px',
   },
   imageSection: {
     marginLeft: '20px',
@@ -48,9 +52,9 @@ export default makeStyles((theme) => ({
       flexDirection: 'column',
     },
     width: '100%',
-    border: '2px solid black',
-    boxShadow: '2px 2px 2px 2px rgba(0, 0, 0, 0.7)',
-    borderRadius: '8px',
+    // borderTop: '2px solid black',
+    // boxShadow: '2px 2px 2px 2px rgba(0, 0, 0, 0.7)',
+    // borderRadius: '8px',
   },
   loadingPaper: {
     display: 'flex',
@@ -62,12 +66,16 @@ export default makeStyles((theme) => ({
   },
   commentsOuterContainer: {
     display: 'flex',
-    justifyContent: 'space-between',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    justifyContent: 'center',
     width: '100%',
   },
   commentsInnerContainer: {
-    height: '200px',
+    height: '250px',
     overflowY: 'auto',
+    width: '100%',
     marginRight: '30px',
   },
+  
 }));

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container } from '@material-ui/core';
 import {
   BrowserRouter as Router,
@@ -31,7 +31,11 @@ const App = () => {
     transports: ['websocket', 'polling', 'flashsocket'],
   });
 
-  const [dark, setDark] = useState(false);
+  const [dark, setDark] = useState(true);
+
+  useEffect(() => {
+    document.body.style.background = '#000';
+  }, []);
 
   const handleDarkMode = () => {
     if (!dark) document.body.style.background = '#000';

@@ -15,8 +15,10 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import Brightness4Icon from '@material-ui/icons/Brightness4';
 import 'react-responsive-modal/styles.css';
-
+import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import decode from 'jwt-decode';
+import LockOpenIcon from '@material-ui/icons/LockOpen';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 const Navbar = ({ handleDarkMode }) => {
   const classes = useStyles();
@@ -24,6 +26,7 @@ const Navbar = ({ handleDarkMode }) => {
   const dispatch = useDispatch();
   const history = useHistory();
   const location = useLocation();
+  let name = JSON.parse(localStorage.getItem('profile'));
 
   useEffect(() => {
     const token = user?.token;
@@ -39,7 +42,6 @@ const Navbar = ({ handleDarkMode }) => {
 
   const logout = () => {
     dispatch({ type: 'LOGOUT' });
-    history.push('/');
     setUser(null);
 
     toast.success('Logout Successful!', {
@@ -51,6 +53,22 @@ const Navbar = ({ handleDarkMode }) => {
       draggable: true,
       progress: undefined,
     });
+  };
+
+  const toastShow = () => {
+    toast.success(`Please SignUp or Login to Connect`, {
+      position: 'top-center',
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
+
+  const handleConnect = () => {
+    toastShow();
   };
 
   return (
@@ -106,18 +124,34 @@ const Navbar = ({ handleDarkMode }) => {
             }}
             src={memories}
             alt='memories'
-            fontSize='large'
+            fontSize='default'
           />
-          {window.innerWidth > 697 ? 'Toggle' : ''}
+          {window.innerWidth > 697 && 'Toggle'}
         </Button>
       </div>
       <Grid className={classes.toolbar}>
+        <Button
+          style={{ marginRight: '10px' }}
+          variant='contained'
+          color='primary'
+          onClick={() =>
+            name?.result?.name ? history.push('/choosechat') : handleConnect()
+          }
+        >
+          <PeopleAltIcon
+            fontSize='default'
+            style={{ marginRight: `${window.innerWidth > 480 && '5px'}` }}
+          />
+
+          {window.innerWidth > 480 && 'Connect'}
+        </Button>
+
         {user ? (
           <div className={classes.profile}>
             <Avatar
               className={classes.purple}
-              alt={user.result.name}
-              src={user.result.imageUrl}
+              alt={user.result?.name}
+              src={user.result?.imageUrl}
             >
               eefe
               {user.result.name.charAt(0)}
@@ -133,18 +167,26 @@ const Navbar = ({ handleDarkMode }) => {
               color='secondary'
               onClick={logout}
             >
-              logout
+              <ExitToAppIcon
+                style={{ marginRight: `${window.innerWidth > 480 && '5px'}` }}
+              />
+              {window.innerWidth > 480 && 'logout'}
             </Button>
           </div>
         ) : (
           <div>
             <Button
-              component={Link}
-              to='/auth'
+              // component={Link}
+              onClick={() => history.push('/auth')}
               variant='contained'
               color='primary'
+              className={classes.logout}
             >
-              Sign In
+              <LockOpenIcon
+                style={{ marginRight: `${window.innerWidth > 480 && '5px'}` }}
+              />
+
+              {window.innerWidth > 480 && 'Sign In'}
             </Button>
           </div>
         )}

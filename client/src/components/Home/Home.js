@@ -39,6 +39,8 @@ import {
 // import useStyles from '../../styles';
 import Posts from '../Posts/Posts';
 import Form from '../Form/Form';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+import SearchIcon from '@material-ui/icons/Search';
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -146,11 +148,6 @@ const Home = () => {
     });
   };
 
-  const handleConnect = () => {
-    toastShow();
-    history.push('/');
-  };
-
   const handleAdd = (tag) => {
     setTags([...tags, tag]);
   };
@@ -162,7 +159,7 @@ const Home = () => {
   return (
     <Grow in>
       <Container maxWidth='xl'>
-        <div style={{ marginLeft: '40%', marginBottom: '20px' }}>
+        {/* <div style={{ marginLeft: '40%', marginBottom: '20px' }}>
           <Button
             variant='contained'
             color='primary'
@@ -172,7 +169,7 @@ const Home = () => {
           >
             Connect
           </Button>
-        </div>
+        </div> */}
 
         {showLogin && toastSuccess()}
         {user && toastInfo()}
@@ -218,6 +215,7 @@ const Home = () => {
                 color='primary'
                 variant='contained'
               >
+                <SearchIcon style={{ marginRight: '3px' }} />
                 Search
               </Button>
             </AppBar>
@@ -228,6 +226,7 @@ const Home = () => {
               fullWidth
               onClick={() => history.push(`/create`)}
             >
+              <AddCircleIcon style={{ marginRight: '3px' }} />
               Create
             </Button>
             {!searchQuery && !tags.length && (
@@ -248,57 +247,48 @@ const Home = () => {
           draggable
           pauseOnHover
         />
-        <div
-          style={{
-            textAlign: 'center',
-            marginTop: '40px',
-
-            // padding: '15px',
-            // border: '2px solid white',
-            // boxShadow: '2px 2px 2px 2px rgba(0, 0, 0, 0.8)',
-          }}
-        >
+        <div className='socials '>
           <RedditShareButton
             title={title}
-            children={<RedditIcon round={true} size={60} />}
+            children={<RedditIcon round={true} size={40} />}
             url={url}
             className='social-hover'
-            style={{ marginLeft: '20px' }}
+            style={{ marginTop: '20px' }}
           />
 
           <WhatsappShareButton
             title={title}
-            children={<WhatsappIcon round={true} size={60} />}
+            children={<WhatsappIcon round={true} size={40} />}
             url={url}
-            style={{ marginLeft: '20px' }}
+            style={{ marginTop: '20px' }}
             className='social-hover'
           />
           <TelegramShareButton
             title={title}
-            children={<TelegramIcon round={true} size={60} />}
+            children={<TelegramIcon round={true} size={40} />}
             url={url}
-            style={{ marginLeft: '20px' }}
+            style={{ marginTop: '20px' }}
             className='social-hover'
           />
           <EmailShareButton
             title={title}
-            children={<EmailIcon round={true} size={60} />}
+            children={<EmailIcon round={true} size={40} />}
             url={url}
-            style={{ marginLeft: '20px' }}
+            style={{ marginTop: '20px' }}
             className='social-hover'
           />
           <TwitterShareButton
             title={title}
-            children={<TwitterIcon round={true} size={60} />}
+            children={<TwitterIcon round={true} size={40} />}
             url={url}
-            style={{ marginLeft: '20px' }}
+            style={{ marginTop: '20px' }}
             className='social-hover'
           />
           <LinkedinShareButton
             title={title}
-            children={<LinkedinIcon round={true} size={60} />}
+            children={<LinkedinIcon round={true} size={40} />}
             url={url}
-            style={{ marginLeft: '20px' }}
+            style={{ marginTop: '20px' }}
             className='social-hover'
           />
         </div>

@@ -27,30 +27,47 @@ const CommentSection = ({ post }) => {
 
   return (
     <div className={classes.commentsOuterContainer}>
-      <div className={classes.commentsInnerContainer}>
-        <Typography gutterBottom variant='h6'>
-          <Badge name='Comments' backgroundColor='#3f51b5' />
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <Badge name='Comments' backgroundColor='#3f51b5' />
 
-          <QuestionAnswerIcon style={{ marginLeft: '10px' }} color='primary' />
-        </Typography>
-        {comments.map((c, i) => (
-          <Typography key={i} gutterBottom variant='subtitle1'>
-            <strong>{c.split(': ')[0]}:</strong>
-            {c.split(':')[1]}
+        <QuestionAnswerIcon style={{ marginLeft: '10px' }} color='primary' />
+      </div>
+
+      <div className={classes.commentsInnerContainer}>
+        {comments.length > 0 ? (
+          comments.map((c, i) => (
+            <Typography key={i} gutterBottom variant='subtitle1'>
+              <strong>{c.split(': ')[0]}:</strong>
+              {c.split(':')[1]}
+            </Typography>
+          ))
+        ) : (
+          <Typography gutterBottom variant='h6' style={{ marginTop: '15px' }}>
+            <Badge
+              name='Be the first One to Comment!'
+              backgroundColor='#3f51b5'
+            />
           </Typography>
-        ))}
+        )}
         <div ref={commentRef}> </div>
       </div>
-      {user?.result?.name && (
-        <div style={{ width: '70%' }}>
+
+      {user?.result?.name ? (
+        <div style={{ width: '100%', marginTop: '15px', height: '100px' }}>
           <Typography gutterBottom variant='h6'>
             <Badge name='Write a Comment' backgroundColor='#3f51b5' />
           </Typography>
           <TextField
             fullWidth
-            rows={4}
+            rows={2}
             variant='outlined'
-            label='comment'
+            label='Write a comment...'
             multiline
             value={comment}
             onChange={(e) => setComment(e.target.value)}
@@ -65,6 +82,15 @@ const CommentSection = ({ post }) => {
           >
             Comment
           </Button>
+        </div>
+      ) : (
+        <div style={{ width: '100%', marginTop: '15px' }}>
+          <Typography gutterBottom variant='h4'>
+            <Badge
+              name='Please Sign In to Comment!'
+              backgroundColor='#3f51b5'
+            />
+          </Typography>
         </div>
       )}
     </div>
